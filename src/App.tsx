@@ -1,8 +1,10 @@
 // import { Card, CardContent,Input,Typography } from '@material-ui/core';
-import { Input } from '@material-ui/core';
+import { Input, Grid } from '@material-ui/core';
 import * as React from 'react';
 import './App.css';
 import SimpleCard from './components/WordCard';
+import SelectBox from './components/SelectBox';
+
 import logo from './logo.svg';
 
 interface IState {
@@ -44,9 +46,13 @@ class App extends React.Component<{}, IState> {
         <p className="App-intro">
           To get started, edit <code>src/App.tsx</code> and save to reload.
         </p>
-        <Input placeholder="Enter your text to translate here" onKeyPress={this.translate} />
+        <Grid container={true} justify='center'>
+          <Grid item={true} xs={8} xl={4}>
+            <Input placeholder="Enter your text to translate here" onKeyPress={this.translate} fullWidth={true}/>
+          </Grid>
+        </Grid>
         <SimpleCard word={this.state.text} />
-
+        <SelectBox supportedLanguages={this.state.supportedLanguages}/>
       </div>
     );
   }
@@ -121,7 +127,6 @@ class App extends React.Component<{}, IState> {
 
       })
       .catch(error => {
-        console.log("Initial request is screwed");
         console.log("There was an error with the translation request: ", error);
       });
   }

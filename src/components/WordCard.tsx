@@ -15,7 +15,7 @@ export default class WordCard extends React.Component<{word:any}>{
         return(
             
             <Grid container={true} justify='center'>
-                <Grid item={true} xs={8} >
+                <Grid item={true} xs={8} xl={4} >
                     <Card>
                         <CardContent>
                         <Typography color="textSecondary">
