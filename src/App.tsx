@@ -22,19 +22,21 @@ class App extends React.Component<{}, IState> {
     this.state = {
       text: "",
       translatedWords: " ",
-      sourceLanguage: "",
-      destinationLanguage: "",
+      sourceLanguage: "en",
+      destinationLanguage: "en",
       supportedLanguages: []
     }
     this.translate = this.translate.bind(this);
     this.getLanguages = this.getLanguages.bind(this);
+    this.handleSource = this.handleSource.bind(this);
+    this.handleTarget = this.handleTarget.bind(this);
   }
 
 
   public componentDidMount(){
     this.getLanguages();
   }
-
+  
   public render() {
 
     return (
@@ -52,15 +54,16 @@ class App extends React.Component<{}, IState> {
           </Grid>
         </Grid>
         <SimpleCard word={this.state.text} />
-        <SelectBox supportedLanguages={this.state.supportedLanguages}/>
+        <SelectBox text="Source Language" language={this.state.sourceLanguage} handleChange={this.handleSource} supportedLanguages={this.state.supportedLanguages}/>
+        <SelectBox text="Destination Language" language={this.state.destinationLanguage} handleChange={this.handleTarget} supportedLanguages={this.state.supportedLanguages}/>
       </div>
     );
   }
 
   private translate(event: any) {
     if (event.key === "Enter") {
-      const fromLang = 'en';
-      const toLang = 'zh-CN' // translate to chinese
+      const fromLang = this.state.sourceLanguage;
+      const toLang = this.state.destinationLanguage; // translate to chinese
       const text = event.target.value;
       console.log(text);
       const API_KEY = 'AIzaSyB_tlvFVWZYZuZlF7lGa_IQVoKJ2mUxgYk';
@@ -111,13 +114,29 @@ class App extends React.Component<{}, IState> {
     })
       .then(res => res.json())
       .then((response : any) => {
+        
         for(var i =0;i<response.data.languages.length;i++){
+          var dict ={};
+          dict['language'] = response.data.languages[i].name;
+          dict['code'] = response.data.languages[i].language;
+          /* this.setState({
+            supportedLanguages : [...this.state.supportedLanguages,response.data.languages[i]]
+           // supportedLanguages : [...this.state.supportedLanguages,response.data.languages[i].name]
+          });*/
+        
           this.setState({
-            supportedLanguages : [...this.state.supportedLanguages,response.data.languages[i].name]
+            supportedLanguages : [...this.state.supportedLanguages,dict]
+           // supportedLanguages : [...this.state.supportedLanguages,response.data.languages[i].name]
           });
         }
-        console.log(this.state.supportedLanguages[10]);
-        console.log("response from google translate languages: ", response);
+
+        // this.setState({
+        //   supportedLanguages : dict
+        //  // supportedLanguages : [...this.state.supportedLanguages,response.data.languages[i].name]
+        // });
+        //console.log(this.state.supportedLanguages[10][response.data.languages[10].name]);
+        
+        //console.log("response from google translate languages: ", response);
         
         /* response.data.translations.forEach((element :any) => {
           this.setState({
@@ -130,6 +149,17 @@ class App extends React.Component<{}, IState> {
         console.log("There was an error with the translation request: ", error);
       });
   }
+  private handleSource(event: any) {
+    this.setState({
+      sourceLanguage: event.target.value
+    })
+  }
+  private handleTarget(event: any) {
+    this.setState({
+      destinationLanguage: event.target.value
+    })
+  }
+
 }
 
 

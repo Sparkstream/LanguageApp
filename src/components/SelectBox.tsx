@@ -11,17 +11,15 @@ interface IState {
     language : any
 }
 
-export default class SelectBox extends React.Component<{ supportedLanguages: any },IState>{
+export default class SelectBox extends React.Component<{text:any,language:any,handleChange:any,supportedLanguages: any },IState>{
     constructor(props: any) {
         super(props);
         this.state ={
             language : ""
         }
-        this.handleChange = this.handleChange.bind(this);
+        
     }
-    private handleChange(event:any) {
-        this.setState({ language: event.target.value });
-    };
+   
     public render() {
         return (
             <div>
@@ -29,11 +27,11 @@ export default class SelectBox extends React.Component<{ supportedLanguages: any
                 <br/>
                 <FormControl variant="outlined">
                     <InputLabel htmlFor="outlined-age-simple">
-                        Source Language
+                        {this.props.text}
                     </InputLabel>
                     <Select
-                        value={this.state.language}
-                        onChange={this.handleChange}
+                        value={this.props.language}
+                        onChange={this.props.handleChange}
                         input={
                             <OutlinedInput
                                 labelWidth={50}
@@ -42,17 +40,18 @@ export default class SelectBox extends React.Component<{ supportedLanguages: any
                             />
                         }
                     >
-                        <MenuItem value="">
-                            <em>None</em>
-                        </MenuItem>
-                        <MenuItem value={10}>Ten</MenuItem>
-                        <MenuItem value={20}>Twenty</MenuItem>
-                        <MenuItem value={30}>Thirty</MenuItem>
+                    {this.props.supportedLanguages.map((name:any,index:any)=>
+                        {
+                            console.log(this.props.supportedLanguages[index]['language']);
+                            return <MenuItem value={this.props.supportedLanguages[index]['code']} key={index}>{this.props.supportedLanguages[index]['language']}</MenuItem>
+                        }
+                    )}
                     </Select>
                 </FormControl>
             </div>
         );
     }
+
    
     
 }
