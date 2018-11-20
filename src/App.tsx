@@ -1,11 +1,12 @@
 // import { Card, CardContent,Input,Typography } from '@material-ui/core';
-import { Input, Grid } from '@material-ui/core';
+import { Card, CardContent, Typography, Input, Grid } from '@material-ui/core';
 import * as React from 'react';
 import './App.css';
 import SimpleCard from './components/WordCard';
 import SelectBox from './components/SelectBox';
 
-import logo from './logo.svg';
+
+
 
 interface IState {
   text: any,
@@ -30,41 +31,47 @@ class App extends React.Component<{}, IState> {
     this.getLanguages = this.getLanguages.bind(this);
     this.handleSource = this.handleSource.bind(this);
     this.handleTarget = this.handleTarget.bind(this);
+    this.getFavouriteData = this.getFavouriteData.bind(this);
   }
 
 
-  public componentDidMount(){
+  public componentDidMount() {
     this.getLanguages();
+    this.getFavouriteData();
   }
-  
+
   public render() {
 
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <Grid container={true} justify='center'>
-          <Grid item={true} xs={6} xl={4}>
-            <SelectBox text="Source Language" language={this.state.sourceLanguage} handleChange={this.handleSource} supportedLanguages={this.state.supportedLanguages}/>
+      <div id="page-wrap">
+        <div className="App">
+          <Grid container={true} justify='center'>
+            <Grid item={true} xs={8} xl={4}>
+              <SelectBox text="Source Language" language={this.state.sourceLanguage} handleChange={this.handleSource} supportedLanguages={this.state.supportedLanguages} />
+            </Grid>
+            <Grid item={true} xs={8} xl={4}>
+              <SelectBox text="Destination Language" language={this.state.destinationLanguage} handleChange={this.handleTarget} supportedLanguages={this.state.supportedLanguages} />
+            </Grid>
           </Grid>
-          <Grid item={true} xs={6} xl={4}>
-            <SelectBox text="Destination Language" language={this.state.destinationLanguage} handleChange={this.handleTarget} supportedLanguages={this.state.supportedLanguages}/>
-          </Grid>    
-        </Grid>
 
-        <Grid container={true} justify='center'>
-          <Grid item={true} xs={8} xl={4}>
-            <Input placeholder="Enter your text to translate here" onKeyPress={this.translate} fullWidth={true}/>
+          <Grid container={true} justify='center'>
+            <Grid item={true} xs={8} lg={4} style={{ backgroundColor: 'grey' }}>
+              <Card style={{ maxWidth: '90%', marginTop:'10px',marginLeft: '5%',height:'30vh'}}>
+                <CardContent>
+                  <Typography color="textSecondary">
+                    <Input placeholder="Enter your text to translate here" onKeyPress={this.translate} fullWidth={true}/>
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+            <Grid item={true} xs={8} lg={4} style={{ backgroundColor: 'red' }}>
+              <SimpleCard word={this.state.text}/>
+            </Grid>
           </Grid>
-        </Grid>
-        <SimpleCard word={this.state.text} />
-        
-      </div>
+
+
+        </div>
+      </div >
     );
   }
 
@@ -91,12 +98,9 @@ class App extends React.Component<{}, IState> {
         .then(res => res.json())
         .then((response) => {
           console.log("response from google: ", response);
+          console.log("text is ", this.state.text);
           this.setState({ text: response.data.translations[0].translatedText });
-          /* response.data.translations.forEach((element :any) => {
-            this.setState({
-              translatedWords : [...this.state.translatedWords,element.translatedText]
-            })
-          }); */
+
 
         })
         .catch(error => {
@@ -121,36 +125,17 @@ class App extends React.Component<{}, IState> {
       method: 'GET'
     })
       .then(res => res.json())
-      .then((response : any) => {
-        
-        for(var i =0;i<response.data.languages.length;i++){
-          var dict ={};
+      .then((response: any) => {
+
+        for (var i = 0; i < response.data.languages.length; i++) {
+          var dict = {};
           dict['language'] = response.data.languages[i].name;
           dict['code'] = response.data.languages[i].language;
-          /* this.setState({
-            supportedLanguages : [...this.state.supportedLanguages,response.data.languages[i]]
-           // supportedLanguages : [...this.state.supportedLanguages,response.data.languages[i].name]
-          });*/
-        
           this.setState({
-            supportedLanguages : [...this.state.supportedLanguages,dict]
-           // supportedLanguages : [...this.state.supportedLanguages,response.data.languages[i].name]
+            supportedLanguages: [...this.state.supportedLanguages, dict]
+
           });
         }
-
-        // this.setState({
-        //   supportedLanguages : dict
-        //  // supportedLanguages : [...this.state.supportedLanguages,response.data.languages[i].name]
-        // });
-        //console.log(this.state.supportedLanguages[10][response.data.languages[10].name]);
-        
-        //console.log("response from google translate languages: ", response);
-        
-        /* response.data.translations.forEach((element :any) => {
-          this.setState({
-            translatedWords : [...this.state.translatedWords,element.translatedText]
-          })
-        }); */
 
       })
       .catch(error => {
@@ -167,7 +152,23 @@ class App extends React.Component<{}, IState> {
       destinationLanguage: event.target.value
     })
   }
-
+  private getFavouriteData() {
+    let url = "https://languageapi.azurewebsites.net/api/languageitems/test/0"
+    fetch(url, {
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+      },
+      method: 'GET'
+    })
+      .then(res => res.json())
+      .then((response) => {
+        console.log(response);
+      })
+      .catch(error => {
+        console.log("There was an error with the data extraction from database: ", error);
+      });
+  }
 }
 
 

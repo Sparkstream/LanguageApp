@@ -1,4 +1,4 @@
-import {Card,CardContent,Grid, Typography} from '@material-ui/core';
+import {Card,CardContent, Typography} from '@material-ui/core';
 import * as React from "react"
 
 
@@ -9,22 +9,17 @@ export default class WordCard extends React.Component<{word:any}>{
         
     }
     
-    public render(){
-        
-        
+    public render(){    
         return(
             
-            <Grid container={true} justify='center'>
-                <Grid item={true} xs={8} xl={4} >
-                    <Card>
-                        <CardContent>
-                        <Typography color="textSecondary">
-                            {this.props.word};
-                        </Typography>
-                        </CardContent>
-                    </Card>
-                </Grid>
-            </Grid>
+            <Card style={{ maxWidth: '90%', marginTop:'10px',marginLeft: '5%',height:'30vh'}}>
+                <CardContent>
+                <Typography color="textSecondary">
+                    {this.props.word}
+                </Typography>
+                </CardContent>
+            </Card>
+               
         )
     }
 }

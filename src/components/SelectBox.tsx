@@ -43,7 +43,7 @@ export default class SelectBox extends React.Component<{text:any,language:any,ha
                     >
                     {this.props.supportedLanguages.map((name:any,index:any)=>
                         {
-                            console.log(this.props.supportedLanguages[index]['language']);
+                            
                             return <MenuItem value={this.props.supportedLanguages[index]['code']} key={index}>{this.props.supportedLanguages[index]['language']}</MenuItem>
                         }
                     )}
