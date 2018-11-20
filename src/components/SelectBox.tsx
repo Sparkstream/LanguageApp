@@ -30,6 +30,7 @@ export default class SelectBox extends React.Component<{text:any,language:any,ha
                         {this.props.text}
                     </InputLabel>
                     <Select
+                        style={{width: '200px'}}
                         value={this.props.language}
                         onChange={this.props.handleChange}
                         input={

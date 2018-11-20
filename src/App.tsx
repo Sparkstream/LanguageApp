@@ -49,13 +49,21 @@ class App extends React.Component<{}, IState> {
           To get started, edit <code>src/App.tsx</code> and save to reload.
         </p>
         <Grid container={true} justify='center'>
+          <Grid item={true} xs={6} xl={4}>
+            <SelectBox text="Source Language" language={this.state.sourceLanguage} handleChange={this.handleSource} supportedLanguages={this.state.supportedLanguages}/>
+          </Grid>
+          <Grid item={true} xs={6} xl={4}>
+            <SelectBox text="Destination Language" language={this.state.destinationLanguage} handleChange={this.handleTarget} supportedLanguages={this.state.supportedLanguages}/>
+          </Grid>    
+        </Grid>
+
+        <Grid container={true} justify='center'>
           <Grid item={true} xs={8} xl={4}>
             <Input placeholder="Enter your text to translate here" onKeyPress={this.translate} fullWidth={true}/>
           </Grid>
         </Grid>
         <SimpleCard word={this.state.text} />
-        <SelectBox text="Source Language" language={this.state.sourceLanguage} handleChange={this.handleSource} supportedLanguages={this.state.supportedLanguages}/>
-        <SelectBox text="Destination Language" language={this.state.destinationLanguage} handleChange={this.handleTarget} supportedLanguages={this.state.supportedLanguages}/>
+        
       </div>
     );
   }
