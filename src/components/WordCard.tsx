@@ -11,15 +11,13 @@ export default class WordCard extends React.Component<{word:any}>{
     
     public render(){    
         return(
-            
-            <Card style={{ maxWidth: '90%', marginTop:'10px',marginLeft: '5%',height:'30vh'}}>
+            <Card style={{ maxWidth: '90%', marginTop:'10px',marginLeft: '5%',height:'30vh',overflow:'auto'}}>
                 <CardContent>
-                <Typography color="textSecondary">
+                <Typography variant='h1' color="textSecondary" style={{display:'flex',flexDirection:'column',justifyContent:'center',justifyItems:'center',height:'30vh'}}>
                     {this.props.word}
                 </Typography>
                 </CardContent>
             </Card>
-               
         )
     }
 }

@@ -24,7 +24,7 @@ class App extends React.Component<{}, IState> {
       text: "",
       translatedWords: " ",
       sourceLanguage: "en",
-      destinationLanguage: "en",
+      destinationLanguage: "zh-CN",
       supportedLanguages: []
     }
     this.translate = this.translate.bind(this);
@@ -55,7 +55,7 @@ class App extends React.Component<{}, IState> {
           </Grid>
 
           <Grid container={true} justify='center'>
-            <Grid item={true} xs={8} lg={4} style={{ backgroundColor: 'grey' }}>
+            <Grid item={true} xs={8} lg={4} >
               <Card style={{ maxWidth: '90%', marginTop:'10px',marginLeft: '5%',height:'30vh'}}>
                 <CardContent>
                   <Typography color="textSecondary">
@@ -64,11 +64,10 @@ class App extends React.Component<{}, IState> {
                 </CardContent>
               </Card>
             </Grid>
-            <Grid item={true} xs={8} lg={4} style={{ backgroundColor: 'red' }}>
+            <Grid item={true} xs={8} lg={4}>
               <SimpleCard word={this.state.text}/>
             </Grid>
           </Grid>
-
 
         </div>
       </div >
