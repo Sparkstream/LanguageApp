@@ -1,8 +1,20 @@
 import * as React from 'react';
-import { Card, CardContent, Typography, Grid } from '@material-ui/core';
-export default class DailyWord extends React.Component<{}>{
+import { Button,Card, CardContent, Typography, Grid } from '@material-ui/core';
+import * as wordList from '../words.json';
+
+interface IState{
+    word: any
+}
+export default class RandomWord extends React.Component<{},IState>{
     constructor(props: any) {
         super(props);
+        this.state = {
+            word : ""
+        }
+        this.randomizer = this.randomizer.bind(this);
+    }
+    public componentDidMount(){
+        this.randomizer();
     }
     public render() {
         return (
@@ -13,9 +25,12 @@ export default class DailyWord extends React.Component<{}>{
                             <Card style={{maxWidth:'90%',marginLeft:'5%'}}>
                                 <CardContent>
                                     <Typography color="textSecondary">
-                                        <p>a</p>
+                                        {this.state.word}
                                     </Typography>
                                 </CardContent>
+                                <Button onClick={this.randomizer}>
+                                    a
+                                </Button>
                             </Card>
                         </Grid>
                         <Grid item={true} lg={4} style={{ backgroundColor: 'red' }}>
@@ -33,5 +48,8 @@ export default class DailyWord extends React.Component<{}>{
             </div>
         );
     }
-
+    private randomizer(){
+        this.setState({word:wordList["data"][Math.floor(Math.random()*wordList["data"].length)]["word"]});
+        
+    }
 }

@@ -6,3 +6,7 @@ declare module '*.gif'
 declare module '*.bmp'
 declare module '*.tiff'
 declare module 'google-translate'
+declare module "*.json" {
+    const value: any;
+    export default value;
+}
