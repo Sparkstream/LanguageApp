@@ -1,16 +1,11 @@
-// import { Card, CardContent,Input,Typography } from '@material-ui/core';
 import { Card, CardContent, Typography, Input, Grid } from '@material-ui/core';
 import * as React from 'react';
 import './App.css';
 import SimpleCard from './components/WordCard';
 import SelectBox from './components/SelectBox';
 
-
-
-
 interface IState {
   text: any,
-  translatedWords: any,
   sourceLanguage: any,
   destinationLanguage: any,
   supportedLanguages: any
@@ -22,9 +17,8 @@ class App extends React.Component<{}, IState> {
     super(props)
     this.state = {
       text: "",
-      translatedWords: " ",
       sourceLanguage: "en",
-      destinationLanguage: "zh-CN",
+      destinationLanguage: "zh",
       supportedLanguages: []
     }
     this.translate = this.translate.bind(this);
@@ -32,6 +26,7 @@ class App extends React.Component<{}, IState> {
     this.handleSource = this.handleSource.bind(this);
     this.handleTarget = this.handleTarget.bind(this);
     this.getFavouriteData = this.getFavouriteData.bind(this);
+    this.addFavouriteData = this.addFavouriteData.bind(this);
   }
 
 
@@ -56,16 +51,16 @@ class App extends React.Component<{}, IState> {
 
           <Grid container={true} justify='center'>
             <Grid item={true} xs={8} lg={4} >
-              <Card style={{ maxWidth: '90%', marginTop:'10px',marginLeft: '5%',height:'30vh'}}>
+              <Card style={{ maxWidth: '90%', marginTop: '10px', marginLeft: '5%', height: '30vh' }}>
                 <CardContent>
                   <Typography color="textSecondary">
-                    <Input placeholder="Enter your text to translate here" onKeyPress={this.translate} fullWidth={true}/>
+                    <Input placeholder="Enter your text to translate here" onKeyPress={this.translate} fullWidth={true} />
                   </Typography>
                 </CardContent>
               </Card>
             </Grid>
             <Grid item={true} xs={8} lg={4}>
-              <SimpleCard word={this.state.text}/>
+              <SimpleCard word={this.state.text} />
             </Grid>
           </Grid>
 
@@ -161,6 +156,23 @@ class App extends React.Component<{}, IState> {
       method: 'GET'
     })
       .then(res => res.json())
+      .then((response) => {
+        console.log(response);
+      })
+      .catch(error => {
+        console.log("There was an error with the data extraction from database: ", error);
+      });
+  }
+
+  private addFavouriteData(event: any) {
+    let url = "https://languageapi.azurewebsites.net/api/languageitems/";
+    fetch(url, {
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+      },
+      method: 'POST'
+    }).then(res => res.json())
       .then((response) => {
         console.log(response);
       })

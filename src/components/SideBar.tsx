@@ -5,13 +5,15 @@ export default class SideBar extends React.Component<{ pageWrapId: any, outerCon
 
     constructor(props: any) {
         super(props);
+
     }
 
     public render() {
         return (
+            
             <Menu pageWrapId={this.props.pageWrapId} outerContainerId={this.props.outerContainerId}>
-                <Link to="/" >Translate</Link>
-                <Link to="/randomWord">Random Word</Link>
+                <Link to="/" ><i className="fas fa-language"/> &nbsp;&nbsp;Translate</Link>
+                <Link to="/randomWord"><i className="fas fa-question"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Random Word</Link>
             </Menu>
         );
     }
