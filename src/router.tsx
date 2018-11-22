@@ -5,6 +5,7 @@ import App from './App';
 import RandomWord from './components/RandomWord';
 import MyList from './components/MyList';
 import Login from './components/Login';
+import Profile from './components/Profile';
 
 interface IState{
     authenticated: any
@@ -26,14 +27,13 @@ export default class AppRouter extends React.Component<{},IState>  {
         
         <BrowserRouter>
             {!this.state.authenticated ? <Login authenticate={this.authenticate}/> :
-
             <div id="App">
                 <SideBar pageWrapId={"page-wrap"} outerContainerId={"App"} userId ={this.state.userId}/>
                 <main>
+                    <Route exact={true} path={"/profile/"+ this.state.userId} component={Profile}/>
                     <Route exact={true} path={"/" + this.state.userId} component={App}/>
                     <Route exact={true} path="/randomWord" component={RandomWord}/>
                     <Route exact={true} path={"/myList/"+ this.state.userId} component={MyList}/>
-                    
                 </main>
             </div>
             }
