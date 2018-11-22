@@ -2,7 +2,7 @@ import {Button,Card,CardActions,CardContent, Typography, Icon} from '@material-u
 import * as React from "react"
 
 
-export default class WordCard extends React.Component<{word:any}>{
+export default class WordCard extends React.Component<{word:any,addFavouriteWord:any}>{
     constructor(props:any){
         super(props);
        
@@ -13,7 +13,7 @@ export default class WordCard extends React.Component<{word:any}>{
         return(
             <Card style={{ maxWidth: '90%', marginTop:'10px',marginLeft: '5%',height:'30vh',overflow:'auto'}}>
                 <CardActions style={{display:'flex',justifyContent:'flex-end'}}>
-                  <Button variant="fab">
+                  <Button variant="fab" onClick={this.props.addFavouriteWord} value={this.props.word}>
                     <Icon className="far fa-star"/>
                   </Button>
                 </CardActions>

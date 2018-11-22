@@ -63,14 +63,11 @@ export default class Login extends React.Component<{ authenticate: any }, IState
 
     private loginUser(event: any) {
         event.preventDefault();
-        const username = event.target.username.value;
-        const password = event.target.password.value;
-        console.log(username);
-        console.log(password);
+        
         let url = "https://languageapi.azurewebsites.net/api/UserInfo"
         const formData = {
-            username: username,
-            password: password
+            username: event.target.username.value,
+            password: event.target.password.value
         }
         console.log("The form data is: ", formData);
         fetch(url, {
@@ -84,7 +81,11 @@ export default class Login extends React.Component<{ authenticate: any }, IState
             .then((response) => {
                 console.log("response from api is: ", response);
                 if (response.status == 200) {
-                    this.props.authenticate();
+                    response.json().then((body: any)=>{
+                        console.log("The body is : ",body.id);
+                        this.props.authenticate(body.id);
+                    })
+                    
                     console.log("LOGGED IN");
                 }
             })
@@ -94,17 +95,13 @@ export default class Login extends React.Component<{ authenticate: any }, IState
         //Call callback function here to change authenticated
         return;
     }
-    
+
     private register(event: any) {
         event.preventDefault();
-        const username = event.target.username.value;
-        const password = event.target.password.value;
         const formData = {
             username: event.target.username.value,
             password: event.target.password.value
         }
-        console.log(username);
-        console.log(password);
         console.log("The form data is: ", formData);
         let url = `https://languageapi.azurewebsites.net/api/UserInfo/user`;
         fetch(url, {
@@ -118,7 +115,7 @@ export default class Login extends React.Component<{ authenticate: any }, IState
             .then((response) => {
                 console.log("response from api is: ", response);
                 if (response.status == 200) {
-                    console.log("LOGGED IN");
+                    console.log("Registered Successfully");
                 }
             })
             .catch(error => {

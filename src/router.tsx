@@ -8,7 +8,7 @@ import Login from './components/Login';
 
 interface IState{
     authenticated: any
-
+    userId : any
 }
 
 export default class AppRouter extends React.Component<{},IState>  {
@@ -16,6 +16,7 @@ export default class AppRouter extends React.Component<{},IState>  {
         super(props);
         this.state={
             authenticated:false,
+            userId : 0
         }
         this.authenticate = this.authenticate.bind(this);
         
@@ -27,21 +28,22 @@ export default class AppRouter extends React.Component<{},IState>  {
             {!this.state.authenticated ? <Login authenticate={this.authenticate}/> :
 
             <div id="App">
-                <SideBar pageWrapId={"page-wrap"} outerContainerId={"App"} />
+                <SideBar pageWrapId={"page-wrap"} outerContainerId={"App"} userId ={this.state.userId}/>
                 <main>
-                    
-                    <Route exact={true} path="/" component={App}/>
+                    <Route exact={true} path={"/" + this.state.userId} component={App}/>
                     <Route exact={true} path="/randomWord" component={RandomWord}/>
-                    <Route exact={true} path="/mylist" component={MyList}/>
+                    <Route exact={true} path={"/myList/"+ this.state.userId} component={MyList}/>
+                    
                 </main>
             </div>
             }
         </BrowserRouter>
     );
     }
-    private authenticate(){
+    private authenticate(userId :any){
         this.setState({
-            authenticated : true
+            authenticated : true,
+            userId : userId
         });
     }
 
