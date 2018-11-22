@@ -1,14 +1,17 @@
-import { Card, CardContent, Typography, Input, Grid } from '@material-ui/core';
 import * as React from 'react';
+
+import {Card, CardContent, Grid,Input, Typography  } from '@material-ui/core';
 import './App.css';
-import SimpleCard from './components/WordCard';
 import SelectBox from './components/SelectBox';
+import SimpleCard from './components/WordCard';
+
 
 interface IState {
-  text: any,
-  sourceLanguage: any,
+ 
   destinationLanguage: any,
-  supportedLanguages: any
+  sourceLanguage: any,
+  supportedLanguages: any,
+  text: any
 }
 
 class App extends React.Component<{}, IState> {
@@ -16,10 +19,10 @@ class App extends React.Component<{}, IState> {
   constructor(props: any) {
     super(props)
     this.state = {
-      text: "",
-      sourceLanguage: "en",
       destinationLanguage: "zh",
-      supportedLanguages: []
+      sourceLanguage: "en",
+      supportedLanguages: [],
+      text: "",
     }
     this.translate = this.translate.bind(this);
     this.getLanguages = this.getLanguages.bind(this);
@@ -59,6 +62,7 @@ class App extends React.Component<{}, IState> {
                 </CardContent>
               </Card>
             </Grid>
+            
             <Grid item={true} xs={8} lg={4}>
               <SimpleCard word={this.state.text} />
             </Grid>
@@ -120,16 +124,22 @@ class App extends React.Component<{}, IState> {
     })
       .then(res => res.json())
       .then((response: any) => {
+        for(const i of response.data.languages){
+          
+          this.setState({
+            supportedLanguages: [...this.state.supportedLanguages, {'language':i.name,'code':i.language}]
 
-        for (var i = 0; i < response.data.languages.length; i++) {
+          });
+        }
+        /* for (var i = 0; i < response.data.languages.length; i++) {
           var dict = {};
           dict['language'] = response.data.languages[i].name;
           dict['code'] = response.data.languages[i].language;
           this.setState({
             supportedLanguages: [...this.state.supportedLanguages, dict]
 
-          });
-        }
+          }); 
+        }*/
 
       })
       .catch(error => {
@@ -147,7 +157,7 @@ class App extends React.Component<{}, IState> {
     })
   }
   private getFavouriteData() {
-    let url = "https://languageapi.azurewebsites.net/api/languageitems/test/0"
+    const url = "https://languageapi.azurewebsites.net/api/languageitems/test/0"
     fetch(url, {
       headers: {
         "Accept": "application/json",
@@ -165,7 +175,7 @@ class App extends React.Component<{}, IState> {
   }
 
   private addFavouriteData(event: any) {
-    let url = "https://languageapi.azurewebsites.net/api/languageitems/";
+    const url = "https://languageapi.azurewebsites.net/api/languageitems/";
     fetch(url, {
       headers: {
         "Accept": "application/json",

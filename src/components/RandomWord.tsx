@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button,Card, CardContent, Typography, Grid } from '@material-ui/core';
+import { Button, Card, CardContent, Grid, Typography } from '@material-ui/core';
 import * as wordList from '../words.json';
 
 interface IState{
@@ -49,7 +49,7 @@ export default class RandomWord extends React.Component<{},IState>{
         );
     }
     private randomizer(){
-        this.setState({word:wordList["data"][Math.floor(Math.random()*wordList["data"].length)]["word"]});
+        this.setState({word:wordList['data'][Math.floor(Math.random()*wordList['data'].length)]['word']});
         
     }
 }
