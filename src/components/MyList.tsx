@@ -1,10 +1,14 @@
 import * as React from 'react';
-import { Icon, CardActions, Grid, Card, CardContent, Typography, Button } from '@material-ui/core';
+import { Icon, Input, CardActions, Grid, Card, CardContent, Typography, Button } from '@material-ui/core';
+import Modal from 'react-responsive-modal';
 
 interface IState {
     delete: any,
     userId: any,
     languagesAvailable: any,
+    open: any,
+    selectedLanguage: any,
+    index: any,
     wordList: any
 }
 export default class MyList extends React.Component<{}, IState>{
@@ -13,6 +17,9 @@ export default class MyList extends React.Component<{}, IState>{
         this.state = {
             userId: window.location.href.substring(window.location.href.lastIndexOf("/") + 1),
             languagesAvailable: [],
+            open: false,
+            selectedLanguage: "",
+            index: "",
             wordList: [],
             delete: false
         }
@@ -20,6 +27,7 @@ export default class MyList extends React.Component<{}, IState>{
         this.getLanguagesAvailable = this.getLanguagesAvailable.bind(this);
         this.removeWord = this.removeWord.bind(this);
         this.delete = this.delete.bind(this);
+        this.editRank = this.editRank.bind(this);
     }
 
     public componentDidMount() {
@@ -27,12 +35,13 @@ export default class MyList extends React.Component<{}, IState>{
     }
 
     public render() {
+        const { open } = this.state;
         return (
             <div id="page-wrap">
                 <div className="App">
                     <Grid container={true} justify='center'>
                         <Grid item={true} xs={8} xl={4}>
-                            <Card style={{ maxWidth: '90%', marginLeft: '5%',marginTop:'20px' }}>
+                            <Card style={{ maxWidth: '90%', marginLeft: '5%', marginTop: '20px' }}>
                                 <CardContent>
                                     <Typography color="textSecondary">
                                         <Grid container={true} justify='center'>
@@ -50,7 +59,7 @@ export default class MyList extends React.Component<{}, IState>{
                             </Card>
                         </Grid>
                         <Grid item={true} xs={8} lg={4}>
-                            <Card style={{ maxWidth: '90%', marginLeft: '5%',marginTop:'20px' }}>
+                            <Card style={{ maxWidth: '90%', marginLeft: '5%', marginTop: '20px' }}>
                                 <CardContent>
                                     <CardActions style={{ display: 'flex', justifyContent: 'flex-end' }}>
                                         <Button variant="fab" onClick={this.delete}>
@@ -61,14 +70,23 @@ export default class MyList extends React.Component<{}, IState>{
                                         <Grid container={true} justify='center'>
                                             {this.state.wordList.map((name: any, index: any) => {
                                                 return <Grid item={true} xs={8} lg={8} key={index}>
-                                                    <Button>
+                                                    <Typography color="textSecondary">
                                                         {name['word']}
-                                                    </Button>
+                                                    </Typography>
+
+
+                                                    {this.state.delete ?
+                                                        <Button onClick={this.onOpenModal} value={index}>
+                                                            <i className="fas fa-edit" />
+                                                        </Button>
+                                                        : <div />}
+
                                                     {this.state.delete ?
                                                         <Button onClick={this.removeWord} value={index}>
                                                             <i className="fas fa-minus-circle" />
                                                         </Button>
                                                         : <div />}
+
                                                 </Grid>
                                             })}
                                         </Grid>
@@ -77,6 +95,22 @@ export default class MyList extends React.Component<{}, IState>{
                             </Card>
                         </Grid>
                     </Grid>
+                    <Modal open={open} onClose={this.onCloseModal}>
+                        <form>
+                            <div>
+                                <label>Language: {this.state.selectedLanguage}</label>
+                            </div>
+                            <div>
+                                <label>Word: {open ? this.state.wordList[this.state.index]['word'] : "No word"}</label>
+                            </div>
+                            <div>
+                                <Input id="rank-value" type="text" placeholder={open? this.state.wordList[this.state.index]['rank']:"No rank"} />
+                            </div>
+                            <div>
+                                <Button onClick={this.editRank}>Save Changes </Button>
+                            </div>
+                        </form>
+                    </Modal>
                 </div>
             </div>
         );
@@ -84,6 +118,10 @@ export default class MyList extends React.Component<{}, IState>{
 
     private getFavouriteData(event: any) {
         const url = "https://languageapi.azurewebsites.net/api/languageitems/" + this.state.userId + "/" + event.currentTarget.value;
+        const languageSelected = event.currentTarget.value;
+        this.setState({
+            selectedLanguage: languageSelected
+        });
         fetch(url, {
             headers: {
                 "Accept": "application/json",
@@ -93,11 +131,13 @@ export default class MyList extends React.Component<{}, IState>{
         })
             .then(res => res.json())
             .then((response) => {
+
                 this.setState({
                     wordList: []
                 })
                 response.forEach((element: any) => {
                     var dict = {};
+                    dict['rank'] = element.rank;
                     dict['word'] = element.word;
                     dict['id'] = element.id;
                     this.setState({
@@ -159,8 +199,65 @@ export default class MyList extends React.Component<{}, IState>{
                 });
             }
         })
-        .catch(error => {
-            console.log("There was an error with the deletion from the database: ", error);
+            .catch(error => {
+                console.log("There was an error with the deletion from the database: ", error);
+            });
+    }
+    private onOpenModal = (event: any) => {
+        const index = event.currentTarget.value;
+        this.setState({
+            open: true,
+            index: index
         });
     }
+    private onCloseModal = () => {
+
+        this.setState({
+            open: false
+        });
+    }
+    private editRank(event: any) {
+        const rank = document.getElementById('rank-value') as HTMLInputElement
+        const languageItem = {
+            rank: rank.value,
+            userId: this.state.userId,
+            id : this.state.wordList[this.state.index]['id'],
+            languageName: this.state.selectedLanguage
+        }
+        const url = "https://languageapi.azurewebsites.net/api/languageitems/";
+        console.log(JSON.stringify(languageItem));
+
+        fetch(url, {
+            body: JSON.stringify(languageItem),
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            },
+            method: 'PUT'
+        }).then((response: any) => {
+
+            if (response.status == 204) {
+                alert('rank successfully changed');
+                var array = [];
+                for (var i = 0; i < this.state.wordList.length; i++) {
+                    if (i == this.state.index) {
+                        array.push({
+                            rank: languageItem['rank'],
+                            word: this.state.wordList[i]['word'],
+                            id: this.state.wordList[i]['id']
+                        })
+                    } else {
+                        array.push(this.state.wordList[i]);
+                    }
+                }
+                this.setState({
+                    wordList:array
+                })
+            }
+        })
+            .catch(error => {
+                console.log("There was an error with the deletion from the database: ", error);
+            });
+    }
+
 }
