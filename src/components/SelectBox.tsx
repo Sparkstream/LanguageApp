@@ -23,9 +23,8 @@ export default class SelectBox extends React.Component<{text:any,language:any,ha
     public render() {
         return (
             <div>
-                <br/>
-                <br/>
-                <FormControl variant="outlined">
+ 
+                <FormControl variant="outlined" style={{marginTop:'20px'}}>
                     <InputLabel htmlFor="outlined-age-simple">
                         {this.props.text}
                     </InputLabel>

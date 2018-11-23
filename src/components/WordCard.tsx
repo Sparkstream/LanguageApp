@@ -18,7 +18,7 @@ export default class WordCard extends React.Component<{word:any,addFavouriteWord
                   </Button>
                 </CardActions>
                 <CardContent>
-                <Typography variant='h3' color="textSecondary" style={{display:'flex',flexDirection:'column',justifyContent:'center',justifyItems:'center',height:'15vh'}}>
+                <Typography variant='h3' color="textSecondary" style={{display:'flex',flexDirection:'column',justifyContent:'center',justifyItems:'center'}}>
                     {this.props.word}  
                 </Typography>
                 </CardContent>

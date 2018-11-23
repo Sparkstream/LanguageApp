@@ -21,7 +21,7 @@ export default class RandomWord extends React.Component<{}, IState>{
             <div id="page-wrap">
                 <div className="App">
                     <Grid container={true} justify='center'>
-                        <Grid item={true} lg={12} xs={12} >
+                        <Grid item={true} lg={12} xs={12} style={{paddingTop:'40vh'}} >
                             <Card style={{ maxWidth: '90%', marginLeft: '5%' }}>
                                 <CardContent>
                                     <Typography color="textSecondary">

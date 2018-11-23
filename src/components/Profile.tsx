@@ -18,9 +18,11 @@ export default class Profile extends React.Component<{}, IState>{
         this.getUsername = this.getUsername.bind(this);
         this.editButton = this.editButton.bind(this);
     }
+    
     public componentDidMount() {
         this.getUsername();
     }
+
     public render() {
         return (
             <div id="page-wrap">

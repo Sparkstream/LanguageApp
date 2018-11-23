@@ -1,10 +1,10 @@
 import * as React from 'react';
 
-import { Card, CardContent, Grid, Input, Typography } from '@material-ui/core';
+import { Button, Card, CardContent, Grid, Input, Typography } from '@material-ui/core';
 import './App.css';
 import SelectBox from './components/SelectBox';
 import SimpleCard from './components/WordCard';
-
+import MediaStreamRecorder from 'msr';
 
 interface IState {
 
@@ -12,7 +12,7 @@ interface IState {
   sourceLanguage: any,
   supportedLanguages: any,
   text: any,
-  userId : any
+  userId: any
 }
 
 class App extends React.Component<{}, IState> {
@@ -30,8 +30,9 @@ class App extends React.Component<{}, IState> {
     this.getLanguages = this.getLanguages.bind(this);
     this.handleSource = this.handleSource.bind(this);
     this.handleTarget = this.handleTarget.bind(this);
-
     this.addFavouriteWord = this.addFavouriteWord.bind(this);
+    this.searchWordByVoice = this.searchWordByVoice.bind(this);
+    this.postAudio = this.postAudio.bind(this);
   }
 
 
@@ -57,9 +58,18 @@ class App extends React.Component<{}, IState> {
             <Grid item={true} xs={8} lg={4} >
               <Card style={{ maxWidth: '90%', marginTop: '10px', marginLeft: '5%', height: '30vh' }}>
                 <CardContent>
-                  <Typography color="textSecondary">
-                    <Input placeholder="Enter your text to translate here" onKeyPress={this.translate} fullWidth={true} />
-                  </Typography>
+                  <Grid container={true}>
+                    <Grid item={true} xs={8} lg={8}>
+                      <Typography color="textSecondary">
+                        <Input id="source-word" placeholder="Enter your text to translate" onKeyPress={this.translate} />
+                      </Typography>
+                    </Grid>
+                    <Grid item={true} xs={4} lg={4}>
+                      <Button onClick={this.searchWordByVoice}>
+                        <i className="fa fa-microphone" />
+                      </Button>
+                    </Grid>
+                  </Grid>
                 </CardContent>
               </Card>
             </Grid>
@@ -99,7 +109,6 @@ class App extends React.Component<{}, IState> {
           console.log("response from google: ", response);
           console.log("text is ", this.state.text);
           this.setState({ text: response.data.translations[0].translatedText });
-
 
         })
         .catch(error => {
@@ -149,11 +158,10 @@ class App extends React.Component<{}, IState> {
     })
   }
 
-
-  private addFavouriteWord(event: any) {  
+  private addFavouriteWord(event: any) {
 
     const languageItem = {
-      userId : this.state.userId,
+      userId: this.state.userId,
       languageCode: this.state.destinationLanguage
     }
 
@@ -180,6 +188,73 @@ class App extends React.Component<{}, IState> {
         console.log("There was an error adding your favourite word ", error);
       });
   }
+
+  private searchWordByVoice() {
+    const mediaConstraints = {
+      audio: true
+    }
+
+    const onMediaSuccess = (stream: any) => {
+      const mediaRecorder = new MediaStreamRecorder(stream);
+      mediaRecorder.mimeType = 'audio/wav';
+      mediaRecorder.ondataavailable = (blob: any) => {
+        this.postAudio(blob);
+        mediaRecorder.stop()
+      }
+      mediaRecorder.start(3000);
+    }
+
+    navigator.getUserMedia(mediaConstraints, onMediaSuccess, onMediaError)
+
+    function onMediaError(e: any) {
+      console.error('media error', e);
+    }
+  }
+
+  private postAudio(blob:any){
+    let accessToken: any;
+    fetch('https://westus.api.cognitive.microsoft.com/sts/v1.0/issueToken', {
+        headers: {
+            'Content-Length': '0',
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Ocp-Apim-Subscription-Key': 'd540f77acd43487ea1cda63823d67cc9'
+        },
+        method: 'POST'
+    }).then((response) => {
+        // console.log(response.text())
+        return response.text()
+    }).then((response) => {
+        console.log(response)
+        accessToken = response
+    }).catch((error) => {
+        console.log("Error", error)
+    });
+
+    // posting audio
+    const url = 'https://westus.stt.speech.microsoft.com/speech/recognition/conversation/cognitiveservices/v1?language=en-US';
+    fetch(url, {
+      body: blob, // this is a .wav audio file    
+      headers: {
+          'Accept': 'application/json',
+          'Authorization': 'Bearer' + accessToken,
+          'Content-Type': 'audio/wav;codec=audio/pcm; samplerate=16000',
+          'Ocp-Apim-Subscription-Key': 'd540f77acd43487ea1cda63823d67cc9'
+      },    
+      method: 'POST'
+    }).then((res) => {
+      return res.json()
+    }).then((res: any) => {
+      const textBox = document.getElementById("source-word") as HTMLInputElement;
+      textBox.value = (res.DisplayText as string).slice(0,-1);
+      console.log(res)
+    }).catch((error) => {
+      console.log("Error", error)
+    });
+  }
+
+
+
+
 }
 
 

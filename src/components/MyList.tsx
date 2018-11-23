@@ -31,8 +31,8 @@ export default class MyList extends React.Component<{}, IState>{
             <div id="page-wrap">
                 <div className="App">
                     <Grid container={true} justify='center'>
-                        <Grid item={true} xs={8} lg={4}>
-                            <Card style={{ maxWidth: '90%', marginLeft: '5%' }}>
+                        <Grid item={true} xs={8} xl={4}>
+                            <Card style={{ maxWidth: '90%', marginLeft: '5%',marginTop:'20px' }}>
                                 <CardContent>
                                     <Typography color="textSecondary">
                                         <Grid container={true} justify='center'>
@@ -50,7 +50,7 @@ export default class MyList extends React.Component<{}, IState>{
                             </Card>
                         </Grid>
                         <Grid item={true} xs={8} lg={4}>
-                            <Card style={{ maxWidth: '90%', marginLeft: '5%' }}>
+                            <Card style={{ maxWidth: '90%', marginLeft: '5%',marginTop:'20px' }}>
                                 <CardContent>
                                     <CardActions style={{ display: 'flex', justifyContent: 'flex-end' }}>
                                         <Button variant="fab" onClick={this.delete}>
