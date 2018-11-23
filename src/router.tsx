@@ -2,7 +2,6 @@ import * as React from 'react';
 import { BrowserRouter, Route } from 'react-router-dom';
 import SideBar from './components/SideBar';
 import App from './App';
-import RandomWord from './components/RandomWord';
 import MyList from './components/MyList';
 import Login from './components/Login';
 import Profile from './components/Profile';
@@ -32,7 +31,6 @@ export default class AppRouter extends React.Component<{},IState>  {
                 <main>
                     <Route exact={true} path={"/profile/"+ this.state.userId} component={Profile}/>
                     <Route exact={true} path={"/" + this.state.userId} component={App}/>
-                    <Route exact={true} path="/randomWord" component={RandomWord}/>
                     <Route exact={true} path={"/myList/"+ this.state.userId} component={MyList}/>
                 </main>
             </div>

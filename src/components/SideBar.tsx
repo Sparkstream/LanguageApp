@@ -16,7 +16,6 @@ export default class SideBar extends React.Component<{ pageWrapId: any, outerCon
                 <img src="/logo.png"/>
                 <Link to={"/profile/" + this.props.userId}><i className="fas fa-user-circle"/>&nbsp;&nbsp;&nbsp;&nbsp;My Profile</Link>
                 <Link to={"/" + this.props.userId} ><i className="fas fa-language"/> &nbsp;&nbsp;Translate</Link>
-                <Link to="/randomWord"><i className="fas fa-question"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Random Word</Link>
                 <Link to={"/myList/" + this.props.userId}><i className="fas fa-clipboard-list"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;My Favourite Words</Link>
             </Menu>
         );

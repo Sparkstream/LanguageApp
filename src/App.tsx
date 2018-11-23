@@ -5,6 +5,7 @@ import './App.css';
 import SelectBox from './components/SelectBox';
 import SimpleCard from './components/WordCard';
 import MediaStreamRecorder from 'msr';
+import * as wordList from './words.json';
 
 interface IState {
 
@@ -33,6 +34,7 @@ class App extends React.Component<{}, IState> {
     this.addFavouriteWord = this.addFavouriteWord.bind(this);
     this.searchWordByVoice = this.searchWordByVoice.bind(this);
     this.postAudio = this.postAudio.bind(this);
+    this.randomizer = this.randomizer.bind(this);
   }
 
 
@@ -68,6 +70,14 @@ class App extends React.Component<{}, IState> {
                       <Button onClick={this.searchWordByVoice}>
                         <i className="fa fa-microphone" />
                       </Button>
+                    </Grid>
+                    <Grid item={true} xs={8} lg={8}>
+                      <Typography color="textSecondary">
+                        <Button onClick={this.randomizer} >
+                        
+                        <i className="fas fa-question"/>
+                        </Button>
+                      </Typography>
                     </Grid>
                   </Grid>
                 </CardContent>
@@ -252,6 +262,10 @@ class App extends React.Component<{}, IState> {
     });
   }
 
+  private randomizer() {
+    const textBox = document.getElementById("source-word") as HTMLInputElement;
+    textBox.value = wordList['data'][Math.floor(Math.random() * wordList['data'].length)]['word']
+  }
 
 
 
