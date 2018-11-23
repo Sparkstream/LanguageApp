@@ -102,7 +102,6 @@ export default class Login extends React.Component<{ authenticate: any }, IState
             username: event.target.username.value,
             password: event.target.password.value
         }
-        console.log("The form data is: ", formData);
         let url = `https://languageapi.azurewebsites.net/api/UserInfo/user`;
         fetch(url, {
             body: JSON.stringify(formData),

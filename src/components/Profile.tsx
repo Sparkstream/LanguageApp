@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Grid, Card, CardContent, Typography, Avatar, Input, Button } from '@material-ui/core';
+import { Grid, Card, CardContent, Typography, Avatar, Input, Button } from '@material-ui/core';
 
 interface IState {
     userId: any,
@@ -18,7 +18,7 @@ export default class Profile extends React.Component<{}, IState>{
         this.getUsername = this.getUsername.bind(this);
         this.editButton = this.editButton.bind(this);
     }
-    public componentDidMount(){
+    public componentDidMount() {
         this.getUsername();
     }
     public render() {
@@ -28,7 +28,7 @@ export default class Profile extends React.Component<{}, IState>{
                     <Grid container={true} justify='center'>
                         <Grid item={true} lg={4}>
                             <Card style={{ maxWidth: '90%', marginLeft: '5%' }}>
-                                <CardContent>
+                                <CardContent >
                                     <Typography color="textSecondary">
                                         <Grid container={true} justify='center'>
                                             <Grid item={true} lg={8} style={{ display: 'flex', justifyContent: 'center', justifyItems: 'center', alignContent: 'center', alignItems: 'center' }} >
@@ -44,18 +44,14 @@ export default class Profile extends React.Component<{}, IState>{
                                                     </div>
                                                     <div style={{ display: 'flex', marginTop: '10px', alignItems: 'center', justifyContent: 'center', justifyItems: 'center' }}>
                                                         {this.state.edit ?
-                                                        <Button name="Password" type="submit" color='primary' variant="contained">Change password</Button>
-                                                        
-                                                        :
-                                                        <Button name="Edit" onClick={this.editButton} variant="fab" color ="primary" aria-label="edit">
-                                                            <i className="fas fa-edit"/>
-                                                        </Button>}
-
+                                                            <Button name="Password" type="submit" color='primary' variant="contained">Change password</Button>
+                                                            :
+                                                            <Button name="Edit" onClick={this.editButton} variant="fab" color="primary" aria-label="edit">
+                                                                <i className="fas fa-edit" />
+                                                            </Button>}
                                                     </div>
-                                                    
                                                 </form>
                                             </Grid>
-                                            
                                         </Grid>
                                     </Typography>
                                 </CardContent>
@@ -67,14 +63,14 @@ export default class Profile extends React.Component<{}, IState>{
         );
     }
 
-    private changePassword(event:any) {
+    private changePassword(event: any) {
         event.preventDefault();
         const url = "https://languageapi.azurewebsites.net/api/userinfo/update";
         const userInfo = {
-            id : this.state.userId,
+            id: this.state.userId,
             password: event.target.profilePassword.value
         }
-        
+
         fetch(url, {
             body: JSON.stringify(userInfo),
             headers: {
@@ -83,11 +79,11 @@ export default class Profile extends React.Component<{}, IState>{
             },
             method: 'PUT'
         })
-            
+
             .then((response) => {
                 console.log(response);
                 this.setState({
-                    edit : false
+                    edit: false
                 })
                 alert('Password changed successfully');
             })
@@ -96,8 +92,8 @@ export default class Profile extends React.Component<{}, IState>{
             });
     }
 
-    private getUsername(){
-        
+    private getUsername() {
+
         const url = "https://languageapi.azurewebsites.net/api/userinfo/username/" + this.state.userId;
         fetch(url, {
             headers: {
@@ -106,21 +102,21 @@ export default class Profile extends React.Component<{}, IState>{
             },
             method: 'GET'
         })
-        .then(res => res.json())
-        .then((response) => {
-            console.log(response);
-            this.setState({
-                username : response.username
+            .then(res => res.json())
+            .then((response) => {
+                console.log(response);
+                this.setState({
+                    username: response.username
+                })
             })
-        })
-        .catch(error => {
-            console.log("There was an error with the data extraction from database: ", error);
-        });
+            .catch(error => {
+                console.log("There was an error with the data extraction from database: ", error);
+            });
     }
-    
-    private editButton(){
+
+    private editButton() {
         this.setState({
-            edit : true
+            edit: true
         })
     }
 }
