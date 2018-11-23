@@ -69,7 +69,7 @@ export default class Login extends React.Component<{ authenticate: any }, IState
             username: event.target.username.value,
             password: event.target.password.value
         }
-        console.log("The form data is: ", formData);
+        
         fetch(url, {
             body: JSON.stringify(formData),
             headers: {
